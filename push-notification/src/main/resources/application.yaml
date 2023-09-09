@@ -1,0 +1,8 @@
+config:
+  redis:
+    type: ${REDIS_TYPE:STANDALONE}
+    master: ${REDIS_MASTER:mymaster}
+    addresses: ${REDIS_ADDRESSES:localhost:6379}
+logging:
+  level:
+    root: INFO

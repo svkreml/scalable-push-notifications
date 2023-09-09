@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.pushnotification.payload.RedisNotificationPayload;
 import com.test.pushnotification.service.EmitterService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
@@ -12,9 +13,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class RedisMessageSubscriber implements MessageListener {
 
-    @Autowired private EmitterService emitterService;
+    private final EmitterService emitterService;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
@@ -27,6 +29,7 @@ public class RedisMessageSubscriber implements MessageListener {
                     notificationPayload.getFrom(),
                     notificationPayload.getMessage());
 
+            System.out.println(message.toString());
         } catch (JsonProcessingException e) {
             log.error("unable to deserialize message ", e);
         }

@@ -1,0 +1,67 @@
+version: '3.6'
+
+services:
+
+  push-ui:
+    build:
+      context: ./push-notification-client
+      dockerfile: Dockerfile
+    container_name: push-ui
+    restart: "no"
+    ports:
+      - 4200:80
+    depends_on:
+      - push-back
+    networks:
+      - back-network
+
+  push-back: &push-back
+    build:
+      context: ./push-notification
+      dockerfile: Dockerfile
+    restart: "no"
+    environment:
+      - REDIS_TYPE=STANDALONE
+      - REDIS_MASTER=mymaster
+      - REDIS_ADDRESSES=redis:6379
+    ports:
+      - 8080:8080
+    depends_on:
+      - redis
+    networks:
+      - back-network
+
+  push-back-2:
+    <<: *push-back
+    ports:
+      - 8081:8080
+
+  push-back-3:
+    <<: *push-back
+    ports:
+      - 8082:8080
+
+
+  redis:
+    image: redis:7
+    restart: "no"
+    command: redis-server
+    volumes:
+      - redis-data:/data
+      - redis-conf:/usr/local/etc/redis/redis.conf
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"
+    networks:
+      - back-network
+
+volumes:
+  redis-data:
+    driver: local
+  redis-conf:
+    driver: local
+
+networks:
+  back-network:
+    driver: bridge
