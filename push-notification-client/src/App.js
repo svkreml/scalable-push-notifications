@@ -35,7 +35,7 @@ class App extends Component {
   }
 
   initListener = () => {
-    const eventSource = new EventSource("http://localhost:8080/subscription");
+    const eventSource = new EventSource("http://localhost:8080/subscription/"+ this.state.username);
 
     eventSource.onopen = (e) => console.log("open");
 
@@ -45,7 +45,7 @@ class App extends Component {
       } else {
         console.log(e);
       }
-      this.initListener();
+      setTimeout(() => this.initListener(), 1000);
     };
 
     eventSource.addEventListener(

@@ -22,12 +22,12 @@ public class NotificationController {
     @Autowired
     private RedisMessagePublisher redisMessagePublisher;
 
-    @GetMapping("/subscription")
-    public SseEmitter subsribe() {
+    @GetMapping("/subscription/{username}")
+    public SseEmitter subsribe(@PathVariable String username) {
         log.info("subscribing...");
 
         SseEmitter sseEmitter = new SseEmitter(24 * 60 * 60 * 1000l);
-        emitterService.addEmitter(sseEmitter);
+        emitterService.addEmitter(sseEmitter, username);
 
         log.info("subscribed");
         return sseEmitter;
