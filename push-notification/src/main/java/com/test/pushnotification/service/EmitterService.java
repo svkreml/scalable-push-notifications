@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -18,8 +16,8 @@ public class EmitterService {
     Map<String, SseEmitter> emitters = new HashMap<>();
 
     public void addEmitter(SseEmitter emitter, String username) {
-        emitter.onCompletion(() -> emitters.remove(emitter));
-        emitter.onTimeout(() -> emitters.remove(emitter));
+        emitter.onCompletion(() -> emitters.remove(username));
+        emitter.onTimeout(() -> emitters.remove(username));
         emitters.put(username, emitter);
     }
 
